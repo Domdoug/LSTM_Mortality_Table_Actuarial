@@ -37,15 +37,16 @@ pasta = os.getcwd()
 # In[3]:
 
 
-pasta_resultados = os.path.join(pasta, "resultados")
-pasta_graficos = os.path.join(pasta, "graficos")
+pasta_resultados = os.path.join(pasta, "resultados1")
+pasta_graficos = os.path.join(pasta, "graficos3")
 
 
 # In[4]:
 
 
 # Regex notation by "\s+". This means a single space, or multiple spaces are all to be treated as a single separator.
-df_dados = pd.read_csv('bltper_1x1.txt', skiprows=2, sep = '\s+') 
+# df_dados = pd.read_csv('bltper_1x1.txt', skiprows=2, sep = '\s+') 
+df_dados = pd.read_csv(os.path.join(pasta, "dados") + "/" + 'bltper_1x1.txt', skiprows=2, sep = '\s+') 
 
 
 # In[5]:
@@ -175,7 +176,8 @@ for x in range(0, w_max+1):
     
     model.add(LSTM(n_neurons, activation='relu', input_shape=(n_input, n_features), return_sequences=True))
     #model.add(LSTM(n_neurons, activation='relu', input_shape=(n_input, n_features)))
-    model.add(Dropout(0.20))
+	# Para manter o mesmo padrão da simulação da rede Neural Bi-direcional, vou manter somente uma camada de dropout
+    # model.add(Dropout(0.20))
     
     # Adding a second LSTM layer and some Dropout regularisation
     model.add(LSTM(n_neurons))
@@ -303,6 +305,9 @@ print()
 print('Tempo de processamento:')
 print('{:0>2}:{:0>2}:{:05.2f}'.format(int(hours), int(minutes), seconds))
 print()
+
+# Tempo de processamento:16:47:38.46 (final às 01:22 do dia 21/08/2021)
+# Tempo de processamento:17:10:14.56 em 24/08/21
 
 
 # #### 5 - Valores de RMSE por idade

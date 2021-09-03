@@ -54,7 +54,7 @@ pasta = os.getcwd()
 # In[3]:
 
 
-pasta_resultados = os.path.join(pasta, "resultados1")
+pasta_resultados = os.path.join(pasta, "resultados")
 pasta_graficos = os.path.join(pasta, "graficos1")
 
 
@@ -62,7 +62,8 @@ pasta_graficos = os.path.join(pasta, "graficos1")
 
 
 # Regex notation by "\s+". This means a single space, or multiple spaces are all to be treated as a single separator.
-df_dados = pd.read_csv('bltper_1x1.txt', skiprows=2, sep = '\s+') 
+# df_dados = pd.read_csv('bltper_1x1.txt', skiprows=2, sep = '\s+') 
+df_dados = pd.read_csv(os.path.join(pasta, "dados") + "/" + 'bltper_1x1.txt', skiprows=2, sep = '\s+') 
 
 
 # In[ ]:
@@ -253,17 +254,15 @@ for x in range(0, w_max+1):
 
     # Gráfico da estimativa, com a base de teste
     #plt.figure(figsize=(10,5))
+    '''
     fig = plt.figure(figsize=(10,5))
-    ax = fig.add_subplot(111) # "111" means "1x1 grid, first subplot" 
+    ax = fig.add_subplot(111) 
     ax.plot(df_teste.index, df_teste['logqx'])
     ax.plot(df_teste.index, df_teste['Prediction'], color='r')
-    #ax.legend(loc='best', fontsize='xx-large')
     ax.legend(loc='best', fontsize='xx-large', labels=['logqx', 'Estimativa'])
-    fig.suptitle('logqx Bi-Direcional LSTM dataset teste na idade = %i' %x, fontweight="bold") # Título parametrizado com a idade
+    fig.suptitle('logqx Bi-Direcional LSTM dataset teste na idade = %i' %x, fontweight="bold") 
     plt.savefig(pasta_graficos + '/' + 'prev_Bi_Direcional_LSTM_test_idade'+str(x)+'.png')
-    # plt.show()
-    #plt.close(fig)
-    
+    '''
     
     pred_actual_rmse = rmse(df_teste.iloc[-n_input:, [0]], df_teste.iloc[-n_input:, [1]])
     print("idade:", x, "rmse: ", pred_actual_rmse)
@@ -310,8 +309,8 @@ for x in range(0, w_max+1):
     
     df_proj = pd.concat([serie,df_predict], axis=1)
     
+    '''
     
-    # plt.figure(figsize=(10, 5))
     fig = plt.figure(figsize=(10,5))
     ax = fig.add_subplot(111)  # "111" means "1x1 grid, first subplot"
     ax.plot(df_proj.index, df_proj['logqx'])
@@ -321,10 +320,10 @@ for x in range(0, w_max+1):
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=16)
     fig.suptitle('Logqx  Bi-Direcional LSTM projetado na idade = %i' %x, fontweight = "bold") # Título parametrizado com a idade
-    # plt.title('Logqx projetado na idade = %i' %x) # Título parametrizado com a idade
+    
     plt.savefig(pasta_graficos + '/' + 'proj_Bi_Direcional_LSTM_log_qx'+str(x)+'.png')
-    # plt.show()
-
+    
+    '''
 
 # fim do cronometro do processamento
 
@@ -335,6 +334,10 @@ print()
 print('Tempo de processamento:')
 print('{:0>2}:{:0>2}:{:05.2f}'.format(int(hours), int(minutes), seconds))
 print()
+
+#Tempo de processamento: 22:32:14.93
+
+# Tempo de processamento sem imprimir os gráficos: 18:35:29.37
 
 
 # #### 5 - Valores de RMSE por idade
@@ -391,7 +394,7 @@ def unirSeries(df, explode):
 # In[19]:
 
 
-colunas = np.arange(2019, 2029)
+colunas = np.arange(2020, 2050)
 df_temp = pd.DataFrame(predict_res, columns=colunas)
 df_lstm_res = unirSeries(df_temp,colunas)
 df_lstm_res = df_lstm_res.reset_index(drop=True)
@@ -424,13 +427,13 @@ df_forecast_res_exp.head()
 # In[23]:
 
 
-df_forecast_res_exp.to_csv(pasta_resultados + '/' + 'lstm_previsao_qx_500_Bi_Direcional_LSTM_demography.csv')
+df_forecast_res_exp.to_csv(pasta_resultados + '/' + 'lstm_previsao_qx_500_Bi_Direcional_demography.csv')
 
 
 # In[24]:
 
 
-pd.DataFrame(pred_actual_rmse_res).to_csv(pasta_resultados + '/' + 'pred_actual_rmse_res_500_Bi_Direcional_LSTM_demography.csv', header=['RMSE'])
+pd.DataFrame(pred_actual_rmse_res).to_csv(pasta_resultados + '/' + 'pred_actual_rmse_res_500_Bi_Direcional_demography.csv', header=['RMSE'])
 
 
 # In[ ]:
